@@ -1,0 +1,48 @@
+* {
+  background-color: black;
+}
+
+.btn-color {
+  background-color: #cd2e71;
+  border: none;
+}
+
+.btn-color:hover {
+  background-color: #cd2e71 !important;
+}
+
+.text-color {
+  color: #cd2e71;
+}
+
+.btn-finish {
+  background-color: #00ff4820;
+  color: #00ff47;
+  border: none;
+}
+
+.card-color {
+  background-color: #cd2e7051 !important;
+}
+
+.bg-dropdown {
+  background-color: black;
+}
+
+.bg-dropdown:hover {
+  background-color: black;
+}
+
+.bg-black {
+  background-color: black;
+  min-height: 87vh;
+}
+
+.bg-carousel {
+  background-color: transparent !important;
+}
+
+.input:focus {
+  background-color: #bcbcbc40 !important;
+  outline: none;
+}
