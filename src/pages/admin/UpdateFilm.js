@@ -160,6 +160,7 @@ const UpdateFilm = () => {
         </Row>
         <Form.Select
           className="text-light bg-dark border border-none"
+          value={form?.category_id}
           onChange={(e) => setSelected(e.target.value)}
         >
           {categorie?.map((item) => (
