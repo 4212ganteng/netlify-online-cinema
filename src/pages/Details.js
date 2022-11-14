@@ -118,7 +118,7 @@ const Details = () => {
             </Col>
           </Row>
           <div className="embed-responsive embed-responsive-16by9">
-            {trx.length === 0 ? (
+            {trx?.length === 0 ? (
               <iframe
                 width="600"
                 height="315"
