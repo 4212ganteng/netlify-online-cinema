@@ -39,7 +39,7 @@ const List = () => {
             <div class="card mb-5 border border-none ">
               <Image
                 src={item?.image}
-                style={{ width: "100%", height: "200px", objectFit: "cover" }}
+                style={{ width: "100%", objectFit: "cover" }}
                 key={item?.id}
                 onClick={() => navigate(`/detail/${item.id}`)}
                 className="w-100"
