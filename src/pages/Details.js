@@ -23,8 +23,6 @@ const Details = () => {
     return filter;
   });
 
-  console.log(trx?.length);
-
   // Create config Snap payment page with useEffect here ...
   useEffect(() => {
     //change this to the script source you want to load, for example this is snap.js sandbox env
