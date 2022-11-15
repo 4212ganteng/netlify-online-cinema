@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import convertRupiah from "rupiah-format";
 
 import { useMutation, useQuery } from "react-query";
@@ -9,6 +9,7 @@ import { API } from "../config/api";
 const Details = () => {
   // ambil id dari params dulu cuy
   const { id } = useParams();
+  const navigate = useNavigate();
 
   let { data: films } = useQuery("filmdetailCache", async () => {
     const response = await API.get(`/film/${id}`);
@@ -73,11 +74,15 @@ const Details = () => {
           /* You may add your own implementation here */
           // console.log(result);
           // history.push("/profile");
+          alert("success");
+          navigate("/profile");
         },
         onPending: function (result) {
           /* You may add your own implementation here */
           // console.log(result);
           // history.push("/profile");
+          alert("pending");
+          navigate("/");
         },
         onError: function (result) {
           /* You may add your own implementation here */
