@@ -1,28 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import convertRupiah from "rupiah-format";
 
 import { useMutation, useQuery } from "react-query";
 import { API } from "../config/api";
+import { UserContext } from "../Usercontext/Usercontex";
 
 const Details = () => {
+  const [state] = useContext(UserContext);
+
   // ambil id dari params dulu cuy
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(false);
 
   let { data: films } = useQuery("filmdetailCache", async () => {
     const response = await API.get(`/film/${id}`);
     return response.data.data;
   });
 
-  let { data: trx } = useQuery("trxCache", async () => {
+  let { data: trx } = useQuery("trx2Cache", async () => {
     const response = await API.get(`/transactions`);
-    const filter = response.data.data.filter(
-      (p) => (p.film_id == id) & (p.status == "success")
+    const response2 = response.data.data.filter(
+      (p) => (p.status === "success") & (p.user_id == state?.user.id)
     );
-    return filter;
+    return response2;
   });
+  console.log("ini trx", trx);
 
   // Create config Snap payment page with useEffect here ...
   useEffect(() => {
@@ -100,57 +105,66 @@ const Details = () => {
     }
   });
 
+  setTimeout(() => {
+    setLoading(false);
+  }, 10000);
   return (
     <Container className="mt-5">
-      <Row>
-        <Col>
-          <Image src={films?.image} className="w-50" />
-        </Col>
-        <Col>
-          <Row>
-            <Col>
-              <h1 className="text-light">{films?.title}</h1>
-            </Col>
-            <Col className="text-end">
+      {isLoading ? (
+        <div>loading....</div>
+      ) : (
+        <Row>
+          <Col>
+            <Image src={films?.image} className="w-50" />
+          </Col>
+          <Col>
+            <Row>
+              <Col>
+                <h1 className="text-light">{films?.title}</h1>
+              </Col>
+              <Col className="text-end">
+                {(trx?.length === 0) & (state?.user.role == "user") ? (
+                  <Button
+                    className="btn-color fw-bold"
+                    onClick={() => handleBuy.mutate()}
+                  >
+                    Buy Now
+                  </Button>
+                ) : null}
+              </Col>
+            </Row>
+            <div className="embed-responsive embed-responsive-16by9">
               {trx?.length === 0 ? (
-                <Button
-                  className="btn-color fw-bold"
-                  onClick={() => handleBuy.mutate()}
-                >
-                  Buy Now
-                </Button>
-              ) : null}
-            </Col>
-          </Row>
-          <div className="embed-responsive embed-responsive-16by9">
-            {trx?.length === 0 ? (
-              <iframe
-                width="600"
-                height="315"
-                src={films?.filmUrl}
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                style={{ pointerEvents: "none" }}
-              ></iframe>
-            ) : (
-              <iframe
-                width="600"
-                height="315"
-                src={films?.filmUrl}
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            )}
-          </div>
-          <h5 className="text-light">{films?.category?.name}</h5>
-          <h5 className="text-color">{convertRupiah.convert(films?.price)}</h5>
-          <p className="text-light">{films?.description}</p>
-        </Col>
-      </Row>
+                <iframe
+                  width="600"
+                  height="315"
+                  src={films?.filmUrl}
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ pointerEvents: "none" }}
+                ></iframe>
+              ) : (
+                <iframe
+                  width="600"
+                  height="315"
+                  src={films?.filmUrl}
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              )}
+            </div>
+            <h5 className="text-light">{films?.category?.name}</h5>
+            <h5 className="text-color">
+              {convertRupiah.convert(films?.price)}
+            </h5>
+            <p className="text-light">{films?.description}</p>
+          </Col>
+        </Row>
+      )}
     </Container>
   );
 };

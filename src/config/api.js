@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const API = axios.create({
-  baseURL: "https://cinema-online-api.herokuapp.com/api/v1",
+  baseURL: "https://ara-cinema.herokuapp.com/api/v1",
 });
 
 export const setAuthToken = (token) => {
