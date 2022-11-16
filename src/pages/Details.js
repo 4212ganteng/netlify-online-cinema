@@ -2,13 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import convertRupiah from "rupiah-format";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useMutation, useQuery } from "react-query";
 import { API } from "../config/api";
 import { UserContext } from "../Usercontext/Usercontex";
 
 const Details = () => {
   const [state] = useContext(UserContext);
+  const notify = () =>
+    toast.warn(`Buy now to stream!`, {
+      theme: "dark",
+    });
 
   // ambil id dari params dulu cuy
   const { id } = useParams();
@@ -56,18 +61,6 @@ const Details = () => {
         // BuyerId: films.user.id,
         price: films.price,
       };
-
-      // Data body
-      // const body = JSON.stringify(data);
-      // Configuration
-      // const config = {
-      //   method: "POST",
-      //   headers: {
-      //     Authorization: "Basic " + localStorage.token,
-      //     "Content-type": "application/json",
-      //   },
-      //   body,
-      // };
 
       // Create variabel for store token payment from response here ...
       const response = await API.post("/transaction/create", data);
@@ -135,16 +128,19 @@ const Details = () => {
             </Row>
             <div className="embed-responsive embed-responsive-16by9">
               {trx?.length === 0 ? (
-                <iframe
-                  width="600"
-                  height="315"
-                  src={films?.filmUrl}
-                  title="YouTube video player"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{ pointerEvents: "none" }}
-                ></iframe>
+                <div onClick={notify}>
+                  <ToastContainer />
+                  <iframe
+                    width="600"
+                    height="315"
+                    src={films?.filmUrl}
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    style={{ pointerEvents: "none" }}
+                  ></iframe>
+                </div>
               ) : (
                 <iframe
                   width="600"
