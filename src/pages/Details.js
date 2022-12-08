@@ -25,14 +25,21 @@ const Details = () => {
     return response.data.data;
   });
 
+  console.log("ini film", films);
+  console.log("state", state);
+
   let { data: trx } = useQuery("trx2Cache", async () => {
     const response = await API.get(`/transactions`);
     const response2 = response.data.data.filter(
-      (p) => (p.status === "success") & (p.user_id == state?.user.id)
+      (p) =>
+        (p.status === "success") &
+        (p.user_id == state?.user.id) &
+        (p.film_id == id)
     );
     return response2;
   });
   console.log("ini trx", trx);
+  console.log(state.user.role, "admin apa user");
 
   // Create config Snap payment page with useEffect here ...
   useEffect(() => {
@@ -116,18 +123,32 @@ const Details = () => {
                 <h1 className="text-light">{films?.title}</h1>
               </Col>
               <Col className="text-end">
-                {(trx?.length === 0) & (state?.user.role == "user") ? (
-                  <Button
-                    className="btn-color fw-bold"
-                    onClick={() => handleBuy.mutate()}
-                  >
-                    Buy Now
-                  </Button>
+                {state.user.role !== "admin" ? (
+                  <div>
+                    {trx?.length === 0 ? (
+                      <Button
+                        className="btn-color fw-bold"
+                        onClick={() => handleBuy.mutate()}
+                      >
+                        Buy Now
+                      </Button>
+                    ) : null}
+                  </div>
                 ) : null}
               </Col>
             </Row>
             <div className="embed-responsive embed-responsive-16by9">
-              {trx?.length === 0 ? (
+              {state.user.role === "admin" ? (
+                <iframe
+                  width="600"
+                  height="315"
+                  src={films?.filmUrl}
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              ) : trx?.length === 0 ? (
                 <div onClick={notify}>
                   <ToastContainer />
                   <iframe
