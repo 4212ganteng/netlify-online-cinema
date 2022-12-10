@@ -28,7 +28,7 @@ const ListFilm = () => {
       {}
       <h2 className="text-start mt-5 text-light mb-5">My List Film</h2>
       <div class="row row-cols-1 row-cols-md-3 g-5">
-        {tes.map((item) => (
+        {tes?.map((item) => (
           <div class="col" className="w-25">
             <div class="card mb-5 border border-none">
               <Image
